@@ -2,7 +2,16 @@
 
 ## Purpose
 
-Make the swarm understandable as a team: who owns the work, what each agent is doing, and whether Paul needs to act. The overview answers these questions immediately. Selection and drill-in reveal detail.
+Let Paul run the swarm like an org. Agents do the work; Paul assigns it, unblocks it, and makes the final calls. The overview shows who owns what and whether Paul needs to act. Selection reveals detail.
+
+## Paul's jobs
+
+- **Assign:** Give work to the Chief of Staff, who routes it.
+- **Unblock:** Act on the one request a blocked agent needs.
+- **Decide:** Approve or decline a specific proposal version.
+- **Check in:** Open any agent; pause or resume them.
+
+Put these at the top as **Your move**. Show only exceptions elsewhere; a team with none reads **On track**.
 
 Visual personality comes from recognizable agents, clear relationships, and meaningful handoffs. Every displayed status must correspond to an observable event or an explicitly labeled simulation.
 
@@ -14,7 +23,7 @@ Solid connections show reporting relationships. Cross-team handoffs, dependencie
 
 ## Work in motion
 
-A work baton represents a specific assignment or artifact moving between agents. Selecting it reveals ownership, completed handoffs, the current milestone, and the next recipient. The prototype demonstrates this through a step-controlled mission replay.
+A work baton represents a specific assignment or artifact moving between agents. Selecting it reveals ownership, completed handoffs, the current milestone, and the next recipient. The prototype shows this in **Track work**, a step-controlled replay.
 
 In a live implementation, animate recorded handoffs. A running process, token generation, or elapsed time does not demonstrate useful progress. Show completed milestones or counts only when supported by the underlying work. Keep replay visibly separate from current state.
 
@@ -36,4 +45,4 @@ Distinguish authorship from review. A reviewer reports checks, evidence, unresol
 
 Use a roster: Chief of Staff, team, then agent. Keep decisions easy to reach. Avoid shrinking the desktop graph into an unreadable diagram.
 
-The supplied prototype uses simulated agents, workloads, costs, and events. Local interactions do not stop external agents, approve artifacts, or change production. Live integrations and event-driven animation remain future work.
+The supplied prototype uses simulated agents, workloads, costs, and events. Its actions change only simulated state and say so; they do not stop external agents, approve artifacts, or change production. Live integrations and event-driven animation remain future work.

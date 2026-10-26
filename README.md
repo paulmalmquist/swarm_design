@@ -2,36 +2,46 @@
 
 ## Paul OS · The Crew
 
-A living org chart for an agent team. See who owns the work, what is happening, and whether Paul needs to act. Select an agent for its latest result, blocker, and next action; open supporting evidence only when needed.
+Run a team of AI agents like an org. Agents do the work. You assign it, unblock it, and make the final calls.
 
-**This is an interactive concept with simulated agents and activity. It is not connected to Paul OS or external accounts.**
+**Concept only. Agents and activity are simulated; nothing connects to real accounts.**
 
-## Open the prototype
+## How you manage
 
-Open [`index.html`](index.html) in a browser. It is self-contained and requires no installation or build step. Alternatively, run `python3 -m http.server 8000` from this directory and visit `http://localhost:8000`.
+| Your job | How |
+| --- | --- |
+| **Assign** | Give work to Atlas, your Chief of Staff. Atlas routes it to the right agent. |
+| **Unblock** | Blocked agents surface one request, such as **Reconnect warehouse access**. |
+| **Decide** | Approve or decline proposals, with evidence and unknowns shown. |
+| **Check in** | Select anyone for result, blocker, and next action. Pause or resume them. |
 
-- **Org chart:** Stable agent seats grouped into teams.
-- **Agent details:** Result, blocker, and next action, with deeper evidence and permissions.
-- **Follow a mission:** Step through a simulated handoff from investigation to human decision.
-- **Needs you:** Open the agent responsible for a decision or dependency.
-- **Mobile:** Expand a team, then select an agent.
+Everything else runs without you. Team headers show only exceptions: **1 blocked**, **1 needs you**, or **On track**.
 
-## Project files
+## Open it
+
+Open [`index.html`](index.html) in a browser. No install or build needed.
+
+- **Your move:** Assign, Unblock, and Decide cards. Actions update the simulated team.
+- **Org chart:** You → Atlas → four teams → agents.
+- **Track work:** Replay how one piece of work moved between agents.
+- **Mobile:** Tap a team to expand it.
+
+## Files
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Runnable standalone prototype |
-| `prototype/crew-org-chart.html` | Editable HTML, CSS, and JavaScript source fragment |
-| `DESIGN.md` | Product concept and interaction principles |
-| `CLAUDE.md` | Concise outward communication requirements |
-| `HANDOFF.md` | Integration brief for work Claude |
+| `index.html` | Runnable prototype (generated) |
+| `prototype/crew-org-chart.html` | Editable source |
+| `scripts/build.py` | Rebuilds `index.html` from the source |
+| `DESIGN.md` | Product concept |
+| `CLAUDE.md` | Communication rules |
+| `HANDOFF.md` | Brief for building this into Paul OS |
 | `AGENTS.md` | Entry point for coding agents |
-| `scripts/build.py` | Regenerate the standalone page from the fragment |
 
-After editing the fragment, run `python3 scripts/build.py` and commit both HTML files.
+After editing the source, run `python3 scripts/build.py` and commit both HTML files.
 
 ## Validation
 
-JavaScript syntax and DOM interactions were checked: agent rendering, initially hidden details, evidence disclosure, closing details, forward and reverse handoffs, decision routing, and the mobile team roster. These checks produced no runtime errors. Full browser layout verification remains pending; the browser download was unavailable in the authoring environment.
+Checked in Chromium at desktop (light and dark) and 390 px mobile: no script errors and no horizontal scroll. Tested assign, unblock, decide, pause and resume, Track work, closing details, and keyboard focus after each action.
 
-No live agent control, authentication, approval execution, deployment, or telemetry integration is implemented. The simulated mission history is separate from the illustrative org-chart snapshot.
+Not built: live agents, authentication, real approvals, or telemetry.

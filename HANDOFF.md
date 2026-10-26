@@ -14,10 +14,10 @@ Identify what telemetry is available and what is missing. Do not turn absent eve
 
 ## Deliver in this order
 
-1. Replace the dense status page with the concise org chart and a small **Needs you** queue.
+1. Replace the dense status page with the concise org chart and a **Your move** row: Assign, Unblock, Decide.
 2. Add a selected-agent panel showing assignment, latest result, blocker, and next action. Keep evidence and role details collapsed initially.
 3. Connect verified source coverage and work progress. Keep process heartbeat, last useful action, source freshness, and display freshness separate.
-4. Add a **Follow a mission** view driven by recorded assignment and artifact handoffs. Preserve one reporting manager and one home team when work crosses teams.
+4. Add a **Track work** view driven by recorded assignment and artifact handoffs. Preserve one reporting manager and one home team when work crosses teams.
 5. Expose review findings and the exact proposed artifact or action. Keep authoring and review runs distinct; require the existing approval mechanism for actions that need Paul.
 
 ## Minimum records to map
@@ -39,6 +39,7 @@ Use these as a mapping checklist, not a mandate to replace working storage or in
 - Completed work links to an observable output. Unknown totals do not become invented percentages.
 - Mobile uses a readable expandable roster. Keyboard users can reach every interaction.
 - Authors cannot approve their own changes. Approval applies to the reviewed version.
+- Assign, unblock, decide, and pause use existing services and permissions. Nothing reports success until the system confirms it.
 - Simulated activity is labeled; replay cannot be confused with the live snapshot.
 - Test meaningful interactions and visually inspect desktop and mobile layouts before declaring completion.
 
