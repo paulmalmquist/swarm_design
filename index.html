@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>Paul OS · The Crew</title><style>html{color-scheme:light dark}body{margin:0;padding:16px;background:light-dark(#f5f6f8,#0c1016)}#crew-deck{max-width:1120px;margin:auto}</style></head><body>
+<div id="crew-deck" aria-label="Paul OS agent crew concept, using simulated data">
+  <header class="crew-topbar">
+    <div class="crew-brand"><span class="crew-brandmark" aria-hidden="true">P/</span><div>Paul OS<span class="crew-small crew-muted">Agent operations</span></div></div>
+    <span class="crew-demo">Concept · simulated data</span>
+  </header>
+  <div class="crew-page-heading">
+    <div><h2>The Crew</h2></div>
+    <div class="crew-view-switch" aria-label="View">
+      <button type="button" class="crew-view cursor-interaction" data-view="org" aria-pressed="true">Org chart</button>
+      <button type="button" class="crew-view cursor-interaction" data-view="mission" aria-pressed="false">Follow a mission</button>
+    </div>
+  </div>
+  <div class="crew-briefbar">
+    <button type="button" class="crew-brief cursor-interaction" data-action="decisions"><span class="crew-dot crew-amber"></span><strong>2</strong> need your attention <span aria-hidden="true">↗</span></button>
+    <div class="crew-brief crew-muted">9 agents <span class="crew-sep">/</span> 1 blocked</div>
+  </div>
+  <div class="crew-body">
+    <main class="crew-stage">
+      <section id="crew-org" aria-label="Reporting structure">
+        <div class="crew-chart">
+          <div class="crew-owner"><span class="crew-avatar crew-human">PM</span><div><strong>Paul</strong><span class="crew-small crew-muted">Final decisions</span></div></div>
+          <div class="crew-leader-line" aria-hidden="true"></div>
+          <div id="crew-chief"></div>
+          <div class="crew-team-trunk" aria-hidden="true"></div>
+          <div class="crew-teams" id="crew-teams"></div>
+        </div>
+        <div class="crew-handoff-bar"><span class="crew-baton-dot" aria-hidden="true"></span><div><strong>Forge → Sentry</strong><span class="crew-small crew-muted">Modeling convention · next review</span></div><button type="button" class="crew-link cursor-interaction" data-action="mission">Follow →</button></div>
+      </section>
+      <section id="crew-mission" aria-label="Mission handoffs" hidden>
+        <div class="crew-mission-head"><div class="crew-eyebrow">MISSION 014 · REPLAY</div><h3>Certify a modeling convention</h3><div class="crew-small crew-muted">SCD history and bridge tables · an illustrative assignment</div></div>
+        <div class="crew-mission-roster" id="crew-mission-roster"></div>
+        <div class="crew-replay-head"><span class="crew-small crew-muted">RECORDED HANDOFFS · SIMULATED</span><span id="crew-step-count" class="crew-small"></span></div>
+        <ol class="crew-event-list" id="crew-event-list"></ol>
+        <div class="crew-replay-controls"><button type="button" class="crew-button cursor-interaction" id="crew-previous">← Previous</button><button type="button" class="crew-button crew-primary cursor-interaction" id="crew-next">Next handoff →</button></div>
+        <div id="crew-current-event" class="crew-current-event" aria-live="polite"></div>
+      </section>
+      <section class="crew-attention" id="crew-attention" aria-label="Decisions awaiting Paul">
+        <div class="crew-section-heading"><h3>Needs you</h3></div>
+        <button type="button" class="crew-decision cursor-interaction" data-decision="access"><span class="crew-dot crew-amber"></span><span><strong>Restore warehouse access</strong><span class="crew-small crew-muted">Unblocks four model checks</span></span><span aria-hidden="true">↗</span></button>
+        <button type="button" class="crew-decision cursor-interaction" data-decision="improvement"><span class="crew-dot crew-violet"></span><span><strong>Review narrower write access</strong><span class="crew-small crew-muted">Agent improvement · evidence attached</span></span><span aria-hidden="true">↗</span></button>
+      </section>
+    </main>
+    <aside class="crew-inspector" id="crew-inspector" aria-label="Selected agent" aria-live="polite" hidden></aside>
+  </div>
+  <footer class="crew-footer"><span>Illustrative team · no live connection</span><span>Select an agent to drill in</span></footer>
+  <div id="crew-announcement" class="crew-sr" aria-live="polite"></div>
+</div>
+<style>
+  #crew-deck {
+    --crew-bg: light-dark(#f5f6f8,#101318); --crew-panel: light-dark(#ffffff,#181d25); --crew-panel-2: light-dark(#eef0f5,#202632);
+    --crew-ink: light-dark(#202430,#edf0f7); --crew-muted: light-dark(#606876,#a3adbd); --crew-line: light-dark(#d8dce5,#343d4c);
+    --crew-violet: light-dark(#6952bd,#b7a0ed); --crew-violet-soft: light-dark(#eee9fb,#2b253c); --crew-green: light-dark(#26775d,#7bd6b0);
+    --crew-green-soft: light-dark(#e7f3ee,#20352e); --crew-amber: light-dark(#916200,#e8be6d); --crew-amber-soft: light-dark(#fbf1d9,#393022);
+    --crew-blue: light-dark(#355f9f,#93bafa); --crew-blue-soft: light-dark(#eaf0fa,#223148); --crew-shadow: light-dark(#2530440b,#00000020);
+    font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.45; color:var(--crew-ink);
+    background:var(--crew-bg); border:1px solid var(--crew-line); border-radius:14px; overflow:hidden; width:100%; box-sizing:border-box;
+  }
+  #crew-deck * {box-sizing:border-box;}
+  #crew-deck button {font:inherit;color:inherit;}
+  #crew-deck button:disabled {opacity:.45;cursor:default;}
+  #crew-deck button,#crew-deck summary {-webkit-tap-highlight-color:transparent;}
+  #crew-deck [hidden] {display:none!important;}
+  #crew-deck strong {font-weight:600;}
+  #crew-deck h2,#crew-deck h3,#crew-deck p {margin:0;}
+  #crew-deck h2 {font-size:32px;letter-spacing:-1.1px;font-weight:600;line-height:1.2;}
+  #crew-deck h3 {font-size:16px;font-weight:600;}
+  #crew-deck .crew-small {display:block;font-size:11px;line-height:1.5;}
+  #crew-deck .crew-muted {color:var(--crew-muted);}
+  #crew-deck .crew-eyebrow {font-size:10px;letter-spacing:1.5px;font-weight:600;color:var(--crew-muted);margin-bottom:7px;}
+  #crew-deck .crew-topbar {display:flex;gap:16px;align-items:center;justify-content:space-between;padding:18px 108px 16px 24px;border-bottom:1px solid var(--crew-line);background:var(--crew-panel);}
+  #crew-deck .crew-brand {display:flex;gap:10px;align-items:center;font-weight:600;}
+  #crew-deck .crew-brand .crew-small {font-weight:400;}
+  #crew-deck .crew-brandmark {display:grid;place-items:center;width:35px;height:35px;border:1px solid var(--crew-line);border-radius:9px;font-weight:600;}
+  #crew-deck .crew-demo {font-size:11px;color:var(--crew-muted);border:1px solid var(--crew-line);border-radius:20px;padding:4px 10px;white-space:nowrap;}
+  #crew-deck .crew-page-heading {display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:24px 24px 20px;}
+  #crew-deck .crew-view-switch {display:flex;flex-wrap:wrap;padding:4px;background:var(--crew-panel-2);border-radius:9px;gap:3px;}
+  #crew-deck .crew-view {background:transparent;border:0;border-radius:6px;padding:8px 13px;color:var(--crew-muted);font-size:12px;}
+  #crew-deck .crew-view[aria-pressed=true] {background:var(--crew-panel);color:var(--crew-ink);box-shadow:0 2px 5px var(--crew-shadow);}
+  #crew-deck .crew-briefbar {display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;padding:0 24px 18px;border-bottom:1px solid var(--crew-line);}
+  #crew-deck .crew-brief {display:flex;align-items:center;gap:7px;font-size:11px;}
+  #crew-deck button.crew-brief {border:0;padding:0;background:none;}
+  #crew-deck .crew-sep {opacity:.4;margin:0 2px;}
+  #crew-deck .crew-dot {display:inline-block;flex:none;width:6px;height:6px;border-radius:50%;background:var(--crew-muted);}
+  #crew-deck .crew-amber {background:var(--crew-amber);}
+  #crew-deck .crew-violet {background:var(--crew-violet);}
+  #crew-deck .crew-body {display:grid;grid-template-columns:minmax(0,1fr);align-items:start;}
+  #crew-deck.crew-has-selection .crew-body {grid-template-columns:minmax(0,1fr) 280px;}
+  #crew-deck .crew-stage {min-width:0;padding:22px 20px 20px;}
+  #crew-deck .crew-chart {position:relative;}
+  #crew-deck .crew-owner {display:flex;gap:10px;align-items:center;justify-content:center;max-width:284px;margin:auto;}
+  #crew-deck .crew-avatar {display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;background:var(--crew-panel-2);border:1px solid var(--crew-line);border-radius:10px;font-size:11px;font-weight:600;color:var(--crew-muted);}
+  #crew-deck .crew-human {border-radius:50%;background:var(--crew-panel);color:var(--crew-ink);}
+  #crew-deck .crew-human-label {font-size:9px;letter-spacing:.8px;color:var(--crew-muted);align-self:flex-start;padding-top:4px;}
+  #crew-deck .crew-leader-line {height:22px;width:1px;background:var(--crew-line);margin:auto;}
+  #crew-deck #crew-chief {max-width:285px;margin:auto;}
+  #crew-deck .crew-team-trunk {height:22px;width:1px;background:var(--crew-line);margin:auto;}
+  #crew-deck .crew-teams {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;position:relative;}
+  #crew-deck .crew-teams:before {content:"";position:absolute;left:12.5%;right:12.5%;top:0;height:1px;background:var(--crew-line);}
+  #crew-deck .crew-team {min-width:0;position:relative;}
+  #crew-deck .crew-team:before {content:"";display:block;width:1px;height:18px;background:var(--crew-line);margin:auto;}
+  #crew-deck .crew-team summary {list-style:none;text-align:center;padding:2px 0 13px;min-height:43px;}
+  #crew-deck .crew-team summary::-webkit-details-marker {display:none;}
+  #crew-deck .crew-team-name {font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--crew-muted);font-weight:600;}
+  #crew-deck .crew-team-count {font-size:10px;color:var(--crew-muted);display:block;}
+  #crew-deck .crew-team-body {display:flex;flex-direction:column;gap:10px;}
+  #crew-deck .crew-agent {position:relative;display:block;width:100%;text-align:left;padding:12px 10px;background:var(--crew-panel);border:1px solid var(--crew-line);border-radius:10px;box-shadow:0 2px 5px var(--crew-shadow);transition:border-color .15s,background .15s;}
+  #crew-deck .crew-agent:hover {border-color:var(--crew-violet);}
+  #crew-deck .crew-agent[aria-pressed=true] {border-color:var(--crew-violet);background:var(--crew-violet-soft);}
+  #crew-deck .crew-agent-header {display:flex;gap:8px;align-items:center;}
+  #crew-deck .crew-agent-header .crew-avatar {width:27px;height:27px;border-radius:8px;font-size:10px;}
+  #crew-deck .crew-agent-name {display:block;font-size:13px;font-weight:600;}
+  #crew-deck .crew-agent-role {display:block;font-size:10px;color:var(--crew-muted);line-height:1.4;}
+  #crew-deck .crew-agent-task {display:block;font-size:12px;margin:10px 0 9px;min-height:18px;line-height:1.5;}
+  #crew-deck .crew-status {font-size:10px;display:inline-flex;align-items:center;gap:5px;padding:3px 6px;border-radius:5px;background:var(--crew-panel-2);color:var(--crew-muted);max-width:100%;}
+  #crew-deck .crew-status:before {content:"";width:4px;height:4px;border-radius:50%;background:currentColor;flex:none;}
+  #crew-deck .crew-status[data-state=working] {background:var(--crew-green-soft);color:var(--crew-green);}
+  #crew-deck .crew-status[data-state=blocked],#crew-deck .crew-status[data-state=waiting] {background:var(--crew-amber-soft);color:var(--crew-amber);}
+  #crew-deck .crew-status[data-state=review] {background:var(--crew-violet-soft);color:var(--crew-violet);}
+  #crew-deck .crew-agent-event {display:block;font-size:10px;color:var(--crew-muted);margin-top:7px;line-height:1.5;}
+  #crew-deck .crew-lead-card {padding:12px 14px;}
+  #crew-deck .crew-lead-card .crew-agent-task {min-height:0;margin:8px 0;}
+  #crew-deck .crew-lead-card .crew-agent-role {font-size:11px;}
+  #crew-deck .crew-lead-card .crew-agent-name {font-size:14px;}
+  #crew-deck .crew-lead-card .crew-avatar {width:32px;height:32px;}
+  #crew-deck .crew-legend {display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center;font-size:10px;color:var(--crew-muted);margin-top:18px;}
+  #crew-deck .crew-legend>span {display:flex;align-items:center;gap:6px;}
+  #crew-deck .crew-line-mark {display:inline-block;width:16px;height:1px;background:var(--crew-muted);}
+  #crew-deck .crew-handoff-bar {margin-top:18px;padding:12px 14px;display:flex;align-items:center;gap:10px;border-radius:8px;background:var(--crew-panel-2);font-size:11px;}
+  #crew-deck .crew-handoff-bar>div {flex:1;}
+  #crew-deck .crew-baton-dot {display:block;flex:none;height:11px;width:11px;border-radius:4px;background:var(--crew-violet);transform:rotate(45deg);}
+  #crew-deck .crew-link {border:0;background:none;font-size:11px;padding:5px 0;color:var(--crew-violet);white-space:nowrap;}
+  #crew-deck .crew-inspector {min-width:0;padding:22px 18px;background:var(--crew-panel);border-left:1px solid var(--crew-line);align-self:stretch;}
+  #crew-deck .crew-inspector-close {float:right;border:0;background:none;font-size:11px;color:var(--crew-muted);padding:6px 0 6px 10px;}
+  #crew-deck .crew-summary-list {margin:20px 0;display:grid;gap:16px;}
+  #crew-deck .crew-summary-list dt {font-size:11px;color:var(--crew-muted);margin-bottom:4px;}
+  #crew-deck .crew-summary-list dd {margin:0;font-size:13px;line-height:1.5;}
+  #crew-deck .crew-drill {border-top:1px solid var(--crew-line);padding-top:13px;margin-top:14px;font-size:12px;}
+  #crew-deck .crew-drill>summary {color:var(--crew-violet);}
+  #crew-deck .crew-drill .crew-section-label {margin-top:16px;}
+  #crew-deck .crew-inspector-head {display:flex;gap:10px;align-items:center;margin:12px 0;}
+  #crew-deck .crew-inspector-head h3 {font-size:20px;}
+  #crew-deck .crew-inspector-head .crew-avatar {width:42px;height:42px;border-radius:12px;color:var(--crew-violet);background:var(--crew-violet-soft);}
+  #crew-deck .crew-charter {font-size:12px;color:var(--crew-muted);margin:12px 0 18px;line-height:1.6;}
+  #crew-deck .crew-section-label {color:var(--crew-muted);font-size:10px;letter-spacing:.9px;font-weight:600;margin:20px 0 8px;text-transform:uppercase;}
+  #crew-deck .crew-assignment {font-size:13px;line-height:1.6;}
+  #crew-deck .crew-progress {height:4px;border-radius:3px;background:var(--crew-panel-2);margin:9px 0 5px;overflow:hidden;}
+  #crew-deck .crew-progress>span {display:block;height:100%;background:var(--crew-violet);border-radius:3px;}
+  #crew-deck .crew-health {display:grid;gap:8px;margin:13px 0;}
+  #crew-deck .crew-health-row {display:flex;gap:10px;justify-content:space-between;font-size:11px;}
+  #crew-deck .crew-health-row>span:first-child {color:var(--crew-muted);}
+  #crew-deck .crew-health-row>span:last-child {text-align:right;}
+  #crew-deck .crew-source {display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;font-size:11px;border-bottom:1px solid var(--crew-line);}
+  #crew-deck .crew-source:last-child {border-bottom:0;}
+  #crew-deck .crew-source-state {font-size:10px;text-align:right;color:var(--crew-muted);}
+  #crew-deck .crew-source-state[data-health=blocked] {color:var(--crew-amber);}
+  #crew-deck .crew-inline-note {padding:9px 10px;background:var(--crew-amber-soft);border-radius:7px;color:var(--crew-amber);font-size:11px;line-height:1.5;margin-top:12px;}
+  #crew-deck .crew-evidence-list {padding-left:16px;margin:6px 0;font-size:11px;color:var(--crew-muted);}
+  #crew-deck .crew-evidence-list li {margin:6px 0;}
+  #crew-deck .crew-profile-meta {display:flex;flex-wrap:wrap;gap:5px;margin-top:15px;}
+  #crew-deck .crew-meta-tag {padding:3px 6px;background:var(--crew-panel-2);border-radius:4px;font-size:10px;color:var(--crew-muted);}
+  #crew-deck .crew-detail-disclosure {margin-top:14px;font-size:11px;border-top:1px solid var(--crew-line);padding-top:12px;}
+  #crew-deck .crew-detail-disclosure summary {color:var(--crew-muted);}
+  #crew-deck .crew-detail-disclosure dl {display:grid;grid-template-columns:auto 1fr;gap:6px 9px;font-size:10px;margin-bottom:0;}
+  #crew-deck .crew-detail-disclosure dt {color:var(--crew-muted);}
+  #crew-deck .crew-detail-disclosure dd {margin:0;overflow-wrap:anywhere;}
+  #crew-deck .crew-attention {margin-top:23px;}
+  #crew-deck .crew-section-heading {display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+  #crew-deck .crew-section-heading h3 {font-size:14px;}
+  #crew-deck .crew-decision {display:flex;width:100%;gap:10px;align-items:center;text-align:left;border:0;border-top:1px solid var(--crew-line);background:transparent;padding:12px 0;font-size:12px;}
+  #crew-deck .crew-decision>span:nth-child(2) {flex:1;}
+  #crew-deck .crew-decision strong {font-weight:500;}
+  #crew-deck .crew-decision:hover strong {color:var(--crew-violet);}
+  #crew-deck .crew-footer {display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:12px 24px;font-size:10px;border-top:1px solid var(--crew-line);color:var(--crew-muted);background:var(--crew-panel);}
+  #crew-deck .crew-mission-head {margin-bottom:22px;}
+  #crew-deck .crew-mission-head h3 {font-size:23px;margin-bottom:7px;letter-spacing:-.5px;}
+  #crew-deck .crew-mission-roster {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:24px 0;position:relative;}
+  #crew-deck .crew-mission-roster:before {content:"";position:absolute;left:10%;right:10%;height:1px;top:22px;background:var(--crew-line);}
+  #crew-deck .crew-mission-person {display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;padding:0 0 12px;position:relative;min-width:0;text-align:center;}
+  #crew-deck .crew-mission-person .crew-avatar {width:44px;height:44px;background:var(--crew-panel);z-index:1;border-radius:14px;}
+  #crew-deck .crew-mission-person[data-current=true] .crew-avatar {background:var(--crew-violet-soft);border-color:var(--crew-violet);color:var(--crew-violet);}
+  #crew-deck .crew-mission-person[data-current=true]:after {content:"";width:7px;height:7px;background:var(--crew-violet);transform:rotate(45deg);position:absolute;bottom:0;border-radius:2px;}
+  #crew-deck .crew-mission-person strong {font-size:11px;}
+  #crew-deck .crew-mission-person .crew-small {font-size:10px;color:var(--crew-muted);}
+  #crew-deck .crew-replay-head {display:flex;justify-content:space-between;gap:12px;align-items:center;margin:24px 0 14px;}
+  #crew-deck .crew-event-list {list-style:none;margin:0;padding:0;display:grid;gap:2px;}
+  #crew-deck .crew-event-row {display:grid;grid-template-columns:24px 1fr;gap:12px;border:0;width:100%;text-align:left;border-radius:8px;padding:13px 12px;background:transparent;align-items:start;}
+  #crew-deck .crew-event-row[aria-pressed=true] {background:var(--crew-violet-soft);}
+  #crew-deck .crew-event-number {font-size:10px;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--crew-line);color:var(--crew-muted);}
+  #crew-deck .crew-event-row[aria-pressed=true] .crew-event-number {background:var(--crew-violet);color:var(--crew-panel);border-color:var(--crew-violet);}
+  #crew-deck .crew-event-title {font-size:12px;display:block;margin-bottom:3px;}
+  #crew-deck .crew-event-detail {font-size:11px;color:var(--crew-muted);display:block;line-height:1.5;}
+  #crew-deck .crew-replay-controls {display:flex;justify-content:space-between;gap:14px;margin:20px 0 12px;}
+  #crew-deck .crew-button {border:1px solid var(--crew-line);padding:8px 12px;background:var(--crew-panel);border-radius:7px;font-size:11px;}
+  #crew-deck .crew-primary {background:var(--crew-ink);color:var(--crew-panel);border-color:var(--crew-ink);}
+  #crew-deck .crew-current-event {font-size:11px;color:var(--crew-muted);line-height:1.6;min-height:35px;}
+  #crew-deck .crew-sr {position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+  @media (max-width:940px) {
+    #crew-deck .crew-body,#crew-deck.crew-has-selection .crew-body {grid-template-columns:1fr;}
+    #crew-deck .crew-inspector {border-left:0;border-top:1px solid var(--crew-line);display:block;}
+    #crew-deck .crew-inspector-intro {grid-column:1/-1;}
+    #crew-deck .crew-inspector-head {margin:8px 0;}
+    #crew-deck .crew-charter {margin:8px 0;}
+    #crew-deck .crew-detail-disclosure {grid-column:1/-1;}
+  }
+  @media (max-width:600px) {
+    #crew-deck .crew-topbar {padding:16px 92px 16px 16px;align-items:flex-start;flex-direction:column;gap:9px;}
+    #crew-deck .crew-page-heading {padding:20px 16px 16px;align-items:flex-start;flex-direction:column;gap:14px;}
+    #crew-deck .crew-briefbar {padding:0 16px 16px;gap:10px 16px;}
+    #crew-deck .crew-stage {padding:20px 14px;}
+    #crew-deck .crew-teams {grid-template-columns:1fr;gap:10px;margin-top:0;}
+    #crew-deck .crew-teams:before,#crew-deck .crew-team:before {display:none;}
+    #crew-deck .crew-team {border:1px solid var(--crew-line);border-radius:9px;background:var(--crew-panel);padding:0 12px;}
+    #crew-deck .crew-team summary {text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 0;min-height:48px;}
+    #crew-deck .crew-team summary:after {content:"+";color:var(--crew-muted);font-size:16px;}
+    #crew-deck .crew-team[open] summary:after {content:"−";}
+    #crew-deck .crew-team-name {font-size:11px;}
+    #crew-deck .crew-team-count {margin-left:auto;}
+    #crew-deck .crew-team-body {display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:12px;}
+    #crew-deck .crew-agent {padding:12px 10px;}
+    #crew-deck .crew-inspector {grid-template-columns:1fr;padding:20px 18px;gap:0;}
+    #crew-deck .crew-legend {gap:8px;}
+    #crew-deck .crew-mission-head h3 {font-size:21px;}
+    #crew-deck .crew-mission-roster {gap:4px;}
+    #crew-deck .crew-mission-person .crew-avatar {width:37px;height:37px;border-radius:11px;}
+    #crew-deck .crew-mission-roster:before {top:19px;}
+    #crew-deck .crew-mission-person .crew-small {font-size:10px;}
+    #crew-deck .crew-footer {padding:12px 16px;}
+  }
+  #crew-deck .crew-eyebrow,#crew-deck .crew-team-name,#crew-deck .crew-team-count,#crew-deck .crew-agent-role,#crew-deck .crew-status,#crew-deck .crew-meta-tag,#crew-deck .crew-section-label,#crew-deck .crew-source-state,#crew-deck .crew-detail-disclosure dl,#crew-deck .crew-footer,#crew-deck .crew-event-number,#crew-deck .crew-mission-person .crew-small {font-size:11px;}
+  @media (pointer:coarse) {
+    #crew-deck .crew-view,#crew-deck .crew-button,#crew-deck .crew-link,#crew-deck button.crew-brief {min-height:44px;}
+  }
+  @media (prefers-reduced-motion:reduce) {#crew-deck * {transition:none!important;animation:none!important;}}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('crew-deck');
+  if (!root) return;
+  const $ = s => root.querySelector(s);
+  const $$ = s => Array.from(root.querySelectorAll(s));
+  const agents = [
+    {id:'atlas',name:'Atlas',initials:'AT',role:'Chief of Staff',team:'Executive',state:'working',status:'Coordinating',task:'Prioritizing the next useful action',event:'Delegated a review · 2 min ago',charter:'Owns the plan, routes work, and brings you decisions with evidence attached.',assignment:'Coordinate the modeling convention audit and resolve one blocked dependency.',progress:null,milestone:'Next milestone: independent review received',heartbeat:'12 sec ago',lastAction:'Delegation recorded · 2 min ago',sources:[['Task ledger','Current · 20 sec','ok'],['Connector registry','1 blocked source','blocked']],authority:'Delegate · draft only',spend:'$0.72',outcome:'2 accepted briefs today',evidence:['Mission 014: owner, scope and acceptance checks recorded.','Warehouse dependency escalated to Paul.'],version:'v2.3',run:'demo-atlas-042',next:'Sentry → Paul'},
+    {id:'scout',name:'Scout',initials:'SC',role:'Warehouse Analyst',team:'Signals',state:'blocked',status:'Blocked',task:'Audit dbt history and joins',event:'8 of 12 models inspected',charter:'Finds modeling risks and links each finding to a query, source model, or reproducible result.',assignment:'Inspect 12 selected models for lost history, many-to-many joins, and incorrect grain.',progress:8,total:12,milestone:'8 of 12 models inspected',heartbeat:'9 sec ago',lastAction:'Saved partial findings · 18 min ago',sources:[['dbt manifest','Current · 2 min','ok'],['BigQuery','Access failed · 18 min','blocked']],authority:'Read only',spend:'$0.64',outcome:'1 accepted finding today',evidence:['8 model inspections saved to evidence bundle A-014.','4 warehouse checks remain unverified.'],version:'v1.8',run:'demo-scout-116',next:'Sage',note:'Process is alive. Work is blocked by warehouse access; no recent progress.'},
+    {id:'relay',name:'Relay',initials:'RE',role:'Signal Monitor',team:'Signals',state:'working',status:'Monitoring',task:'Watching your assigned work',event:'Last scan completed · 1 min ago',charter:'Watches your work and routes material changes to the Chief of Staff, with source coverage visible.',assignment:'Track assigned Jira issues and merge requests awaiting your review.',progress:null,milestone:'Next milestone: scheduled incremental scan',heartbeat:'8 sec ago',lastAction:'Completed source scan · 1 min ago',sources:[['Jira · your issues','Current · 1 min','ok'],['GitLab · your MRs','Current · 1 min','ok'],['Slack · selected channels','Partial coverage','blocked']],authority:'Read only',spend:'$0.31',outcome:'3 useful signals accepted',evidence:['Jira and GitLab watermarks recorded.','Slack coverage is limited to selected channels.'],version:'v1.5',run:'demo-relay-065',next:'Atlas'},
+    {id:'sage',name:'Sage',initials:'SA',role:'Knowledge Curator',team:'Knowledge',state:'review',status:'Awaiting review',task:'Propose a bridge-table convention',event:'Proposal v3 ready · 4 min ago',charter:'Turns observations into proposed reusable knowledge, keeping evidence and scope attached.',assignment:'Reconcile the draft SCD and bridge conventions with existing team guidance.',progress:null,milestone:'Draft complete; awaits independent review',heartbeat:'14 sec ago',lastAction:'Produced proposal v3 · 4 min ago',sources:[['Context repository','Current · 3 min','ok'],['Confluence · team space','Current · 2 min','ok']],authority:'Propose promotion',spend:'$0.48',outcome:'1 proposal awaiting review',evidence:['Draft v3 includes grain, keys and join examples.','Warehouse checks are explicitly marked incomplete.'],version:'v2.0',run:'demo-sage-053',next:'Sentry'},
+    {id:'index',name:'Index',initials:'IX',role:'Context Librarian',team:'Knowledge',state:'idle',status:'Available',task:'Context index is up to date',event:'Index completed · 6 min ago',charter:'Keeps approved knowledge discoverable while preserving owners, versions, and scope.',assignment:'No active run. Ready for the next approved knowledge change.',progress:null,milestone:'Last completed: 26 approved documents indexed',heartbeat:'11 sec ago',lastAction:'Index updated · 6 min ago',sources:[['Approved knowledge','Current · 6 min','ok'],['Identity registry','Current · 2 min','ok']],authority:'Index approved content',spend:'$0.19',outcome:'26 documents indexed',evidence:['Index generation 082 recorded.','No unapproved proposals included.'],version:'v1.4',run:'Last: demo-index-082',next:'Atlas'},
+    {id:'forge',name:'Forge',initials:'FO',role:'Analytics Engineer',team:'Delivery',state:'working',status:'Working',task:'Draft tests for the convention',event:'7 of 10 checks complete',charter:'Builds reviewable changes in an isolated workspace and hands off an exact diff with validation evidence.',assignment:'Add example model contracts and tests for a history-preserving dimension and a bridge.',progress:7,total:10,milestone:'7 of 10 planned checks complete',heartbeat:'7 sec ago',lastAction:'Validation result saved · 40 sec ago',sources:[['Analytics repository','Current · 1 min','ok'],['Convention draft v3','Pinned version','ok']],authority:'Draft MR only',spend:'$1.22',outcome:'1 draft MR in progress',evidence:['Draft changes: sample model, grain tests, and docs.','Warehouse-backed checks await Scout’s access recovery.'],version:'v2.1',run:'demo-forge-108',next:'Sentry',note:'May create a draft MR. Cannot merge, deploy, or approve its own work.'},
+    {id:'patch',name:'Patch',initials:'PA',role:'Workflow Engineer',team:'Delivery',state:'paused',status:'Paused',task:'Scheduled loop repair on hold',event:'Paused by policy · 32 min ago',charter:'Repairs workflow plumbing and makes changes visible as a reviewable patch.',assignment:'Hold the scheduler repair until the previous run is reconciled.',progress:null,milestone:'Paused intentionally; no retry loop running',heartbeat:'No worker running',lastAction:'Checkpoint saved · 32 min ago',sources:[['Scheduler history','Snapshot · 32 min','blocked'],['Runtime registry','Current · 20 sec','ok']],authority:'Draft patch only',spend:'$0.08',outcome:'Checkpoint preserved',evidence:['Repair proposal saved; no execution in progress.','Resume requires a fresh preflight.'],version:'v1.2',run:'Paused: demo-patch-017',next:'Atlas'},
+    {id:'sentry',name:'Sentry',initials:'SE',role:'Independent Reviewer',team:'Assurance',state:'review',status:'Reviewing',task:'Challenge the proposed change',event:'2 review findings recorded',charter:'Checks the author’s evidence and challenges the change in a separate review run. Can escalate directly to Paul.',assignment:'Review the exact draft version for correctness, scope, and missing validation.',progress:null,milestone:'2 findings recorded; final disposition pending',heartbeat:'10 sec ago',lastAction:'Review finding saved · 1 min ago',sources:[['Draft artifact','Version pinned','ok'],['Validation bundle','Incomplete warehouse checks','blocked']],authority:'Review · no merge',spend:'$0.44',outcome:'2 findings, 0 final approvals',evidence:['Reviewer run differs from the authoring run.','Required warehouse checks are missing; approval withheld.'],version:'v1.9',run:'demo-sentry-091',next:'Paul',note:'Distinct reviewer identity and run. Automated review is evidence, not a correctness guarantee.'},
+    {id:'evolve',name:'Evolve',initials:'EV',role:'Improvement Scout',team:'Assurance',state:'waiting',status:'Needs you',task:'Propose a narrower write scope',event:'Candidate ready · 12 min ago',charter:'Finds ways to improve the team, tests a candidate change, and submits a versioned proposal.',assignment:'Review a candidate policy that restricts Forge to one approved repository.',progress:6,total:6,milestone:'6 of 6 sandbox permission cases passed',heartbeat:'13 sec ago',lastAction:'Evaluation attached · 12 min ago',sources:[['Run outcomes','Current · 4 min','ok'],['Permission tests','6 cases · 12 min','ok']],authority:'Propose only',spend:'$0.20',outcome:'1 proposal; not promoted',evidence:['Candidate passed 6 narrow permission cases.','Broader effectiveness evaluation is still required.'],version:'v1.1',run:'demo-evolve-024',next:'Paul',note:'Proposed improvement only. Nothing has been promoted or changed.'}
+  ];
+  const byId = Object.fromEntries(agents.map(a=>[a.id,a]));
+  let selected=null, view='org', step=2;
+  const concise = {
+    atlas:{task:'Prepare your next decisions',result:'Two decisions are ready for you.',need:'Restore access; review the permission change.'},
+    scout:{task:'Audit dbt models',result:'8 of 12 models checked.',need:'Restore BigQuery access to finish four checks.'},
+    relay:{task:'Watch your assigned work',result:'Three relevant changes found.',need:'None. Slack coverage is partial.'},
+    sage:{task:'Draft modeling conventions',result:'Convention draft v3 is ready.',need:'None. Waiting for independent review.'},
+    index:{task:'Maintain approved knowledge',result:'26 approved documents indexed.',need:'None. Ready for the next update.'},
+    forge:{task:'Build model tests',result:'7 of 10 validation checks complete.',need:'Warehouse access for the remaining checks.'},
+    patch:{task:'Repair scheduled workflows',result:'Repair checkpoint saved.',need:'Resolve the earlier run before resuming.'},
+    sentry:{task:'Review the proposed change',result:'Two findings; approval withheld.',need:'Missing warehouse checks must be completed.'},
+    evolve:{task:'Improve agent permissions',result:'Candidate passed six permission tests.',need:'Review the proposed scope. Not yet promoted.'}
+  };
+  const mobile = window.matchMedia('(max-width:600px)');
+  const teams = ['Signals','Knowledge','Delivery','Assurance'];
+  const statusCounts = {Signals:'1 working · 1 blocked',Knowledge:'1 in review · 1 available',Delivery:'1 working · 1 paused',Assurance:'1 reviewing · 1 needs you'};
+  const events = [
+    {owner:'scout',title:'Scout receives the investigation',time:'09:04',detail:'Scope fixed at 12 models. Acceptance criteria recorded.',artifact:'Artifact: investigation brief A-014 · Scope: history and many-to-many joins.'},
+    {owner:'sage',title:'Scout → Sage · evidence handed off',time:'09:12',detail:'8 model inspections; 4 checks explicitly unresolved.',artifact:'Artifact: evidence bundle v1 · Partial evidence is preserved as partial.'},
+    {owner:'forge',title:'Sage → Forge · draft assigned',time:'09:16',detail:'Convention draft v3 attached with unresolved checks.',artifact:'Baton with Forge · Produce a reviewable diff and validation bundle.'},
+    {owner:'sentry',title:'Forge → Sentry · review requested',time:'09:24',detail:'Exact draft and test results pinned to the review.',artifact:'Baton with Sentry · Review the pinned version; author cannot self-approve.'},
+    {owner:'paul',title:'Sentry → Paul · decision requested',time:'09:27',detail:'Review withheld: warehouse checks still missing.',artifact:'Baton with Paul · Resolve the missing evidence before considering approval.'}
+  ];
+  function agentCard(a,leader=false) {
+    return `<button type="button" class="crew-agent cursor-interaction ${leader?'crew-lead-card':''}" data-agent="${a.id}" aria-pressed="${a.id===selected}" aria-label="${a.name}, ${a.role}, ${a.status}. ${concise[a.id].task}"><span class="crew-agent-header"><span class="crew-avatar" aria-hidden="true">${a.initials}</span><span><span class="crew-agent-name">${a.name}</span><span class="crew-agent-role">${a.role}</span></span></span><span class="crew-agent-task">${concise[a.id].task}</span><span class="crew-status" data-state="${a.state}">${a.status}</span></button>`;
+  }
+  function renderOrg() {
+    $('#crew-chief').innerHTML=agentCard(byId.atlas,true);
+    $('#crew-teams').innerHTML=teams.map(team=>`<details class="crew-team" ${mobile.matches?'':'open'}><summary class="cursor-interaction"><span class="crew-team-name">${team}</span><span class="crew-team-count">${mobile.matches?statusCounts[team]:'2 agents'}</span></summary><div class="crew-team-body">${agents.filter(a=>a.team===team).map(a=>agentCard(a)).join('')}</div></details>`).join('');
+  }
+  function profile(a) {
+    const c=concise[a.id];
+    $('#crew-inspector').innerHTML=`<button type="button" class="crew-inspector-close cursor-interaction" data-close="true" aria-label="Close agent details">Close ×</button>
+      <div class="crew-inspector-head"><span class="crew-avatar" aria-hidden="true">${a.initials}</span><div><h3>${a.name}</h3><span class="crew-small crew-muted">${a.role}</span></div></div>
+      <span class="crew-status" data-state="${a.state}">${a.status}</span>
+      <dl class="crew-summary-list"><div><dt>Assignment</dt><dd>${c.task}</dd></div><div><dt>Latest result</dt><dd>${c.result}</dd></div><div><dt>What’s needed</dt><dd>${c.need}</dd></div></dl>
+      <details class="crew-drill"><summary class="cursor-interaction">Evidence & history</summary>
+        <ul class="crew-evidence-list">${a.evidence.map(e=>`<li>${e}</li>`).join('')}</ul>
+        <div class="crew-health-row"><span>Last useful action</span><span>${a.lastAction}</span></div>
+        <div class="crew-section-label">Sources</div>${a.sources.map(s=>`<div class="crew-source"><span>${s[0]}</span><span class="crew-source-state" data-health="${s[2]}">${s[1]}</span></div>`).join('')}
+        ${a.note?`<p class="crew-inline-note">${a.note}</p>`:''}
+      </details>
+      <details class="crew-drill"><summary class="cursor-interaction">Role & permissions</summary><p class="crew-charter">${a.charter}</p><div class="crew-profile-meta"><span class="crew-meta-tag">${a.authority}</span></div>
+        <details class="crew-detail-disclosure"><summary class="cursor-interaction">Technical detail</summary><dl><dt>Agent</dt><dd>${a.id}</dd><dt>Team</dt><dd>${a.team}</dd><dt>Manager</dt><dd>${a.id==='atlas'?'Paul':'Atlas'}</dd><dt>Version</dt><dd>${a.version}</dd><dt>Run</dt><dd>${a.run}</dd><dt>Heartbeat</dt><dd>${a.heartbeat}</dd><dt>Demo spend</dt><dd>${a.spend}</dd><dt>Escalation</dt><dd>${a.id==='sentry'?'Direct to Paul':'Atlas → Paul'}</dd></dl></details>
+      </details>`;
+  }
+  function selectAgent(id,scroll=false) {
+    if(!byId[id])return;
+    selected=id;profile(byId[id]);$('#crew-inspector').hidden=false;root.classList.add('crew-has-selection');
+    $$('[data-agent]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.agent===id)));
+    $('#crew-announcement').textContent=`${byId[id].name} selected. Personnel file updated.`;
+    if(scroll&&window.matchMedia('(max-width:940px)').matches)$('#crew-inspector').scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  }
+  function renderMission() {
+    const sequence=['scout','sage','forge','sentry','paul'];
+    $('#crew-mission-roster').innerHTML=sequence.map(id=>{
+      const a=byId[id]||{name:'Paul',initials:'PM',role:'Final decision'};
+      return `<button type="button" class="crew-mission-person cursor-interaction" ${id==='paul'?'data-human="true"':`data-agent="${id}" aria-pressed="${id===selected}"`} data-current="${id===events[step].owner}" aria-label="${a.name}, ${a.role}${id===events[step].owner?', holds the work baton':''}"><span class="crew-avatar" aria-hidden="true">${a.initials}</span><strong>${a.name}</strong><span class="crew-small">${id==='scout'?'Investigate':id==='sage'?'Context':id==='forge'?'Build':id==='sentry'?'Review':'Decide'}</span></button>`;
+    }).join('');
+    $('#crew-step-count').textContent=`${step+1} / ${events.length}`;
+    $('#crew-event-list').innerHTML=events.map((e,i)=>`<li><button type="button" class="crew-event-row cursor-interaction" data-step="${i}" aria-pressed="${step===i}"><span class="crew-event-number">${i+1}</span><span><span class="crew-event-title">${e.title}</span><span class="crew-event-detail">${e.time}${step===i?' · '+e.detail:''}</span></span></button></li>`).join('');
+    $('#crew-previous').disabled=step===0;$('#crew-next').disabled=step===events.length-1;
+    $('#crew-current-event').textContent=events[step].artifact;
+  }
+  function showHumanDecision() {
+    $('#crew-inspector').hidden=false;root.classList.add('crew-has-selection');
+    $('#crew-inspector').innerHTML=`<button type="button" class="crew-inspector-close cursor-interaction" data-close="true" aria-label="Close decision details">Close ×</button><div class="crew-inspector-head"><span class="crew-avatar crew-human">PM</span><div><h3>Paul</h3><span class="crew-small crew-muted">Decision needed · replay</span></div></div><dl class="crew-summary-list"><div><dt>Request</dt><dd>Restore warehouse access.</dd></div><div><dt>Why</dt><dd>Four checks are missing. The draft cannot be approved yet.</dd></div><div><dt>Next</dt><dd>Scout completes the checks; Sentry reviews again.</dd></div></dl><details class="crew-drill"><summary class="cursor-interaction">Review evidence</summary><ul class="crew-evidence-list"><li>Convention draft v3.</li><li>7 of 10 validation checks completed.</li><li>Independent findings against the exact draft.</li></ul></details>`;
+  }
+  function setStep(n) {
+    step=Math.max(0,Math.min(events.length-1,n));
+    if(events[step].owner==='paul')showHumanDecision();else selectAgent(events[step].owner);
+    renderMission();
+  }
+  function setView(v) {
+    view=v;$('#crew-org').hidden=v!=='org';$('#crew-mission').hidden=v!=='mission';
+    $$('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===v)));
+    if(v==='mission')setStep(step);else if(selected)selectAgent(selected);
+  }
+  function showDecision(kind) {
+    selectAgent(kind==='access'?'scout':'evolve',true);
+  }
+  root.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.close){$('#crew-inspector').hidden=true;root.classList.remove('crew-has-selection');selected=null;$$('[data-agent]').forEach(e=>e.setAttribute('aria-pressed','false'));}
+    if(b.dataset.view)setView(b.dataset.view);
+    if(b.dataset.agent)selectAgent(b.dataset.agent,true);
+    if(b.dataset.step!==undefined)setStep(Number(b.dataset.step));
+    if(b.dataset.decision)showDecision(b.dataset.decision);
+    if(b.dataset.human)showHumanDecision();
+    if(b.dataset.action==='mission')setView('mission');
+    if(b.dataset.action==='decisions')$('#crew-attention').scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+    if(b.id==='crew-next')setStep(step+1);
+    if(b.id==='crew-previous')setStep(step-1);
+  });
+  mobile.addEventListener('change',renderOrg);
+  renderOrg();renderMission();
+})();
+</script>
+
+</body></html>
